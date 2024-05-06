@@ -6,7 +6,6 @@ import {RouterModule} from '@angular/router';
 import {TranslateComponent} from './translate.component';
 import {AppTranslocoModule} from '../../core/modules/transloco/transloco.module';
 import {SpokenToSignedModule} from './spoken-to-signed/spoken-to-signed.module';
-import {SendFeedbackComponent} from './send-feedback/send-feedback.component';
 import {SignedToSpokenModule} from './signed-to-spoken/signed-to-spoken.module';
 import {TranslateInputButtonComponent} from './input/button/button.component';
 import {DropPoseFileModule} from './drop-pose-file/drop-pose-file.module';
@@ -35,7 +34,6 @@ const componentModules = [
 ];
 
 const components = [
-  SendFeedbackComponent,
   TranslateInputButtonComponent,
   TranslateComponent,
   TranslateDesktopComponent,
