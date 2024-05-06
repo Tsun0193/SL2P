@@ -14,7 +14,6 @@ import {TranslateLanguageSelectorsModule} from './language-selectors/language-se
 import {MatTooltipModule} from '@angular/material/tooltip';
 import {NtkmeButtonModule} from '@ctrl/ngx-github-buttons';
 import {TranslateDesktopComponent} from './translate-desktop/translate-desktop.component';
-import {TranslateMobileComponent} from './translate-mobile/translate-mobile.component';
 import {FormsModule} from '@angular/forms';
 import {SpeechToTextModule} from '../../components/speech-to-text/speech-to-text.module';
 import {TextToSpeechModule} from '../../components/text-to-speech/text-to-speech.module';
@@ -40,7 +39,6 @@ const components = [
   TranslateInputButtonComponent,
   TranslateComponent,
   TranslateDesktopComponent,
-  TranslateMobileComponent,
 ];
 
 @NgModule({

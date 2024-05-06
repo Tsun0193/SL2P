@@ -1,11 +1,3 @@
-<app-language-selector
-  [flags]="true"
-  [hasLanguageDetection]="false"
-  [languages]="translation.signedLanguages"
-  [language]="signedLanguage$ | async"
-  translationKey="signedLanguagesShort"
-  (languageChange)="setSignedLanguage($event)"></app-language-selector>
-
 <ion-button
   (click)="swapLanguages()"
   id="swap-languages"
@@ -17,10 +9,3 @@
   [attr.aria-label]="'translate.swapLanguages' | transloco">
   <ion-icon name="swap-horizontal"></ion-icon>
 </ion-button>
-
-<app-language-selector
-  [hasLanguageDetection]="spokenToSigned"
-  [languages]="translation.spokenLanguages"
-  [language]="spokenLanguage$ | async"
-  translationKey="languages"
-  (languageChange)="setSpokenLanguage($event)"></app-language-selector>
