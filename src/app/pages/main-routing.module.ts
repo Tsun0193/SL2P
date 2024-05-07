@@ -11,14 +11,6 @@ const routes: Routes = [
         path: '',
         loadChildren: () => import('./translate/translate.module').then(m => m.TranslatePageModule),
       },
-      // {
-      //   path: 'converse',
-      //   loadChildren: () => import('./tab2/tab2.module').then(m => m.Tab2PageModule),
-      // },
-      // {
-      //   path: 'avatars',
-      //   loadChildren: () => import('./tab3/tab3.module').then(m => m.Tab3PageModule),
-      // },
       {path: 'translate', pathMatch: 'full', redirectTo: ''},
     ],
   },

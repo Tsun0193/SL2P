@@ -11,7 +11,6 @@ import {TranslateState} from '../../../modules/translate/translate.state';
 import {VideoState} from '../../../core/modules/ngxs/store/video/video.state';
 import {ngxsConfig} from '../../../core/modules/ngxs/ngxs.module';
 import {HttpClientTestingModule} from '@angular/common/http/testing';
-import {RouterTestingModule} from '@angular/router/testing';
 import {CUSTOM_ELEMENTS_SCHEMA} from '@angular/core';
 import {axe, toHaveNoViolations} from 'jasmine-axe';
 
@@ -29,7 +28,6 @@ describe('TranslateDesktopComponent', () => {
         NoopAnimationsModule,
         NgxsModule.forRoot([SettingsState, TranslateState, VideoState], ngxsConfig),
         HttpClientTestingModule,
-        RouterTestingModule,
       ],
       schemas: [CUSTOM_ELEMENTS_SCHEMA],
     });
