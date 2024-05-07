@@ -1,6 +1,9 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
     <ion-title>{{ 'translate.title' | transloco }}<sup id="version" matTooltip="Alpha"></sup></ion-title>
+    <ion-buttons slot="primary">
+      <app-i18n-language-selector></app-i18n-language-selector>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 

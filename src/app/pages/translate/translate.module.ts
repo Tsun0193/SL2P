@@ -18,6 +18,7 @@ import {SpeechToTextModule} from '../../components/speech-to-text/speech-to-text
 import {TextToSpeechModule} from '../../components/text-to-speech/text-to-speech.module';
 import {VideoModule} from '../../components/video/video.module';
 import {TranslateModule} from '../../modules/translate/translate.module';
+import {I18NLanguageSelectorComponent} from '../../components/i18n-language-selector/i18n-language-selector.component';
 
 const routes = [
   {
@@ -55,6 +56,6 @@ const components = [
     TextToSpeechModule,
     VideoModule,
   ],
-  declarations: components,
+  declarations: [components, I18NLanguageSelectorComponent]
 })
 export class TranslatePageModule {}
