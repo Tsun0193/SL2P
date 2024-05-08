@@ -47,7 +47,7 @@ def extract_coordinates(results):
     return res
 
 class config:
-    path = os.getcwd() + '/model/'
+    path = os.getcwd() + '/src/assets/models/si2sp/'
     seq_len = 12
     rpf = 543
     model_path = path + 'results/asl_model/model.tflite'
@@ -83,7 +83,7 @@ prediction_fn = model.get_signature_runner('serving_default')
 
 
 @app.get('/live-translator')
-def main():
+def live_translate():
     seq = []
     cap = cv2.VideoCapture(0)
     preds = ['']
@@ -104,9 +104,6 @@ def main():
                 if preds[-1] != sign:
                     preds.append(sign)
                 
-            cv2.rectangle(img, (0,0), (640, 40), (245, 117, 16), -1)
-            cv2.putText(img, ' '.join(preds), (10,30), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 2, cv2.LINE_AA)
-
             cv2.imshow('Sign Language Detection', img)
 
             # every 3 seconds, print preds to the terminal, get time from browser
@@ -119,9 +116,45 @@ def main():
         cap.release()
         cv2.destroyAllWindows()
 
-if __name__ == '__main__':
-    main()
+# get input as a video file
+@app.get('/predict')
+def predict(path: str):
+    seq = []
+    cap = cv2.VideoCapture(path)
+    preds = ['']
+    curr_len = len(preds)
+    start_time = time.time()
+    with mp_holistic.Holistic(min_detection_confidence=0.5, min_tracking_confidence=0.5) as holistic:
+        while cap.isOpened():
+            ret, frame = cap.read()
+            img, results = mediapipe_detection(frame, holistic)
+            draw(img, results)
 
+            landmarks = extract_coordinates(results)
+            seq.append(landmarks)
+            if len(seq) % 15 == 0:
+                prediction = prediction_fn(inputs=np.array(seq, dtype = np.float32))
+                sign = np.argmax(prediction["outputs"])
+                sign = decoder(sign)
+                if preds[-1] != sign:
+                    preds.append(sign)
+                
+            cv2.imshow('Sign Language Detection', img)
+
+            # every 3 seconds, print preds to the terminal, get time from browser
+            if len(preds) > curr_len and time.time() - start_time > 3:
+                print(' '.join(preds))
+                start_time = time.time()
+                curr_len = len(preds)
+            if cv2.waitKey(10) & 0xFF == ord('q'):
+                break
+        cap.release()
+        cv2.destroyAllWindows()
+
+
+if __name__ == '__main__':
+    live_translate()
+    # predict('path/to/video')
 
 
 
