@@ -7,11 +7,16 @@ import pandas as pd
 import os
 import time
 import warnings
+from dotenv import load_dotenv
 from fastapi import FastAPI, File, UploadFile
+from src.assets.models.llm.llm import LLM
 
 warnings.filterwarnings('ignore')
 
 app = FastAPI()
+
+load_dotenv()
+completion = LLM()
 
 mp_holistic = mp.solutions.holistic
 mp_drawing = mp.solutions.drawing_utils 
@@ -107,8 +112,10 @@ def live_translate():
             cv2.imshow('Sign Language Detection', img)
 
             # every 3 seconds, print preds to the terminal, get time from browser
-            if len(preds) > curr_len and time.time() - start_time > 3:
-                print(' '.join(preds))
+            if len(preds) > curr_len and time.time() - start_time > 3 and len(preds) > 1:
+                text = ' '.join(preds)
+                print(preds)
+                print(completion(text))
                 start_time = time.time()
                 curr_len = len(preds)
             if cv2.waitKey(10) & 0xFF == ord('q'):
