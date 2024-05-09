@@ -13,8 +13,6 @@ const routes: Routes = [
     path: 'benchmark',
     loadChildren: () => import('./pages/benchmark/benchmark.module').then(m => m.BenchmarkPageModule),
   },
-  {path: 'about', loadChildren: () => import('./pages/landing/landing.module').then(m => m.LandingModule)},
-  {path: 'legal', loadChildren: () => import('./pages/landing/landing.module').then(m => m.LandingModule)},
   {
     path: '**',
     loadChildren: () => import('./pages/not-found/not-found.module').then(m => m.NotFoundPageModule),

@@ -11,7 +11,6 @@ import {TranslateState} from '../../modules/translate/translate.state';
 import {SettingsState} from '../../modules/settings/settings.state';
 import {NoopAnimationsModule} from '@angular/platform-browser/animations';
 import {TranslocoService} from '@ngneat/transloco';
-import {RouterTestingModule} from '@angular/router/testing';
 import {VideoState} from '../../core/modules/ngxs/store/video/video.state';
 import {HttpClientTestingModule} from '@angular/common/http/testing';
 import {MatTabsModule} from '@angular/material/tabs';
@@ -32,7 +31,6 @@ describe('TranslateComponent', () => {
         NoopAnimationsModule,
         NgxsModule.forRoot([SettingsState, TranslateState, VideoState], ngxsConfig),
         HttpClientTestingModule,
-        RouterTestingModule,
       ],
       schemas: [CUSTOM_ELEMENTS_SCHEMA],
     }).compileComponents();
