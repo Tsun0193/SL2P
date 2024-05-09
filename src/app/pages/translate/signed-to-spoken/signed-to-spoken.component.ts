@@ -7,6 +7,7 @@ import {
   SetSignWritingText,
   SetSpokenLanguageText,
 } from '../../../modules/translate/translate.actions';
+import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs';
 
 const FAKE_WORDS = [
@@ -85,8 +86,10 @@ export class SignedToSpokenComponent implements OnInit {
   inputMode$!: Observable<InputMode>;
   spokenLanguage$!: Observable<string>;
   spokenLanguageText$!: Observable<string>;
+  hasSent: boolean = false;
+  translateResult: string = null;
 
-  constructor(private store: Store) {
+  constructor(private http: HttpClient, private store: Store) {
     this.videoState$ = this.store.select<VideoStateModel>(state => state.video);
     this.inputMode$ = this.store.select<InputMode>(state => state.translate.inputMode);
     this.spokenLanguage$ = this.store.select<string>(state => state.translate.spokenLanguage);
@@ -100,9 +103,29 @@ export class SignedToSpokenComponent implements OnInit {
     let lastArray = [];
     let lastText = '';
 
-    const f = () => {
-      const video = document.querySelector('video');
-      if (video) {
+    const f = async () => {
+      const video: HTMLVideoElement | null = document.querySelector("div[id='video-container']>video");
+      
+      if (video !== undefined && video !== null && video.getAttribute("src") !== undefined && 
+          video.getAttribute("src") !== null && video.getAttribute("src") !== "") {
+        
+        if (!this.hasSent) {
+          let blob = await fetch(video.getAttribute("src")).then(r => r.blob());
+          if (blob !== undefined && blob !== null) {
+            this.hasSent = true
+            console.log(blob);
+
+            let formData:FormData = new FormData();
+            let file = new File([blob], "vid");
+            formData.append('uploadFile', file, file.name)
+
+            this.http.post("http://localhost:8000/test", formData).subscribe((data: any) => {
+              this.translateResult = data.name;             
+            })
+          }
+          
+        }
+        
         let resultArray = [];
         let resultText = '';
         for (const step of FAKE_WORDS) {
@@ -121,6 +144,7 @@ export class SignedToSpokenComponent implements OnInit {
           this.store.dispatch(new SetSignWritingText(resultArray));
           lastArray = resultArray;
         }
+
       }
 
       requestAnimationFrame(f);

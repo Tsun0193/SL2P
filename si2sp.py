@@ -8,12 +8,36 @@ import os
 import time
 import warnings
 from dotenv import load_dotenv
-from fastapi import FastAPI, File, UploadFile
+from fastapi import FastAPI, File, UploadFile, Form
 from src.assets.models.llm.llm import LLM
+
+from pydantic import BaseModel
+from typing import Annotated
+from fastapi.middleware.cors import CORSMiddleware
+
+class Item(BaseModel):
+    name: str
 
 warnings.filterwarnings('ignore')
 
 app = FastAPI()
+
+origins = [
+    "http://localhost:4200",
+    "http://127.0.0.1:4200",
+    "http://127.0.0.1:4200/",
+    "http://localhost:4200/"
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+    expose_headers=["*"]
+    
+)
 
 load_dotenv()
 completion = LLM()
@@ -85,7 +109,10 @@ model = tf.lite.Interpreter(model_path=config.model_path)
 found_signs = list(model.get_signature_list().keys())
 prediction_fn = model.get_signature_runner('serving_default')
 
-
+@app.post("/test")
+async def create_item(uploadFile: Annotated[UploadFile, Form()]):
+    print(uploadFile)
+    return {"name": uploadFile.filename}
 
 @app.get('/live-translator')
 def live_translate():
