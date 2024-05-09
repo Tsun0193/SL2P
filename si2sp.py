@@ -76,7 +76,7 @@ def extract_coordinates(results):
     return res
 
 class config:
-    path = os.getcwd() + '/src/assets/models/si2sp/'
+    path = 'src/assets/models/si2sp/'
     seq_len = 12
     rpf = 543
     model_path = path + 'results/asl_model/model.tflite'
@@ -112,7 +112,9 @@ prediction_fn = model.get_signature_runner('serving_default')
 @app.post("/test")
 async def create_item(uploadFile: Annotated[UploadFile, Form()]):
     print(uploadFile)
-    return {"name": uploadFile.filename}
+    if uploadFile.content_type != "video/mp4":
+        return {"name": "Only mp4 files are allowed."}
+    return {"name": uploadFile.filename, "type": uploadFile.content_type}
 
 @app.get('/live-translator')
 def live_translate():
