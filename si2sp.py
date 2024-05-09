@@ -7,7 +7,7 @@ import pandas as pd
 import os
 import time
 import warnings
-from fastapi import FastAPI
+from fastapi import FastAPI, File, UploadFile
 
 warnings.filterwarnings('ignore')
 
@@ -117,16 +117,23 @@ def live_translate():
         cv2.destroyAllWindows()
 
 # get input as a video file
-@app.get('/predict')
-def predict(path: str):
+@app.post('/predict')
+def predict(file: UploadFile = File(...), path = 'data'):
+    with open(f"{path}/{file.filename}", "wb") as buffer:
+        buffer.write(file.file.read())
+
+    cap = cv2.VideoCapture(f"{path}/{file.filename}")
+    os.remove(f"{path}/{file.filename}")
     seq = []
-    cap = cv2.VideoCapture(path)
     preds = ['']
     curr_len = len(preds)
     start_time = time.time()
+
     with mp_holistic.Holistic(min_detection_confidence=0.5, min_tracking_confidence=0.5) as holistic:
         while cap.isOpened():
             ret, frame = cap.read()
+            if not ret:
+                break
             img, results = mediapipe_detection(frame, holistic)
             draw(img, results)
 
@@ -139,7 +146,7 @@ def predict(path: str):
                 if preds[-1] != sign:
                     preds.append(sign)
                 
-            cv2.imshow('Sign Language Detection', img)
+            # cv2.imshow('Sign Language Detection', img)
 
             # every 3 seconds, print preds to the terminal, get time from browser
             if len(preds) > curr_len and time.time() - start_time > 3:

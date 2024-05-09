@@ -4,7 +4,7 @@
   "scripts": {
     "ng": "ng",
     "lint": "NODE_OPTIONS=--max_old_space_size=16384 ng lint",
-    "start": "ng serve --host 0.0.0.0 --disable-host-check",
+    "start": "ng serve --host 0.0.0.0 --disable-host-checkz",
     "build": "ng build --configuration=production --base-href=/",
     "build:stats": "ng build --stats-json",
     "analyze": "webpack-bundle-analyzer dist/sign-translate/browser/stats.json",
