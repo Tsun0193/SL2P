@@ -152,7 +152,7 @@ async def create_item(uploadFile: Annotated[UploadFile, Form()]):
     if uploadFile.content_type != "video/mp4":
         raise HTTPException(status_code=400, detail="File type not supported")
     
-    print(vid)
+    # print(vid)
     
     with open(vid, "wb") as f:
         f.write(uploadFile.file.read())
@@ -160,7 +160,7 @@ async def create_item(uploadFile: Annotated[UploadFile, Form()]):
     cap = cv2.VideoCapture(vid)
     preds = ['']
 
-    print(cap.isOpened())
+    # print(cap.isOpened())
     with mp_holistic.Holistic(min_detection_confidence=0.5, min_tracking_confidence=0.5) as holistic:
         while cap.isOpened():
             ret, frame = cap.read()
@@ -181,7 +181,8 @@ async def create_item(uploadFile: Annotated[UploadFile, Form()]):
     cap.release()
     cv2.destroyAllWindows()
 
-    res = ' '.join(preds)
+    print(preds)
+    res = completion(' '.join(preds))
 
     os.remove(vid)
 
