@@ -25,7 +25,7 @@ app.add_middleware(
     
 )
 
-@app.post("/test")
-async def create_item(uploadFile: Annotated[UploadFile, Form()]):
-    print(uploadFile.filename)
-    return {"name": uploadFile.filename}
+# @app.post("/test")
+# async def create_item(uploadFile: Annotated[UploadFile, Form()]):
+#     print(uploadFile.filename)
+#     return {"name": uploadFile.filename}
