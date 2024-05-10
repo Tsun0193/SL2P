@@ -1,7 +1,7 @@
 .translation-text {
   position: relative;
   height: 100%;
-  padding: 20px 24px;
+  padding: 20px;
   flex: 1;
 
   > .actions-row {
@@ -60,7 +60,7 @@ ion-textarea#mobile {
 
     background-color: white;
     @media (prefers-color-scheme: dark) {
-      background-color: #202124;
+      background-color: white;
     }
   }
 }
