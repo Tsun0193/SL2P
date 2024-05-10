@@ -2,8 +2,8 @@
 
 @media #{$breakpoint-gt-xs} {
   .container::before {
-    background-color: var(--app-tinted-background-color);
-    border-bottom: 1px solid var(--app-divider-color);
+    background-color: var(--app-background-color);
+    // border-bottom: 1px solid var(--app-divider-color);
     content: '';
     display: block;
     height: 106px;
@@ -23,7 +23,7 @@
   }
 
   #input-mode-group {
-    height: 68px;
+    height: 58px;
     font-family: 'Google Sans', Roboto, Arial, sans-serif;
     align-items: center;
     display: flex;
@@ -44,13 +44,14 @@
     height: 100%;
     transition: 0.6s width cubic-bezier(0.4, 0, 0.2, 1);
     box-shadow: 0 0 2px 0 rgba(0, 0, 0, 0.37);
+    border: 1px #1972d2;
 
-    @media (prefers-color-scheme: dark) {
-      background-color: #101010;
+    @media (prefers-color-scheme: light) {
+      background-color: white;
     }
 
     @media #{$breakpoint-gt-xs} {
-      box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.37);
+      box-shadow: 0 0 4px 0 whitesmoke;
     }
 
     @media #{$breakpoint-gt-md} {
