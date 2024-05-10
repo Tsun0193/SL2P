@@ -63,9 +63,20 @@ database-debug.log
 
 .env
 
+.nx
+
 
 src/assets/promotional/about/iphone/*.png
 src/assets/promotional/about/android/*.png
 
 package-lock.json
 bun.lockb
+
+
+*.ipynb
+data/*
+
+#ignore __pycache__
+__pycache__/
+*.pyc
+/src/assets/models/llm/__pycache__/
