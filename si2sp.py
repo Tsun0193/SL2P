@@ -115,7 +115,7 @@ async def create_item(uploadFile: Annotated[UploadFile, Form()]):
     return {"name": uploadFile.filename}
 
 @app.get('/live-translator')
-def live_translate():
+async def live_translate():
     seq = []
     cap = cv2.VideoCapture(0)
     preds = ['']
@@ -152,7 +152,7 @@ def live_translate():
 
 # get input as a video file
 @app.post('/predict')
-def predict(file: UploadFile = File(...), path = 'data'):
+async def predict(file: UploadFile = File(...), path = 'data'):
     with open(f"{path}/{file.filename}", "wb") as buffer:
         buffer.write(file.file.read())
 
