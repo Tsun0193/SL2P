@@ -7,6 +7,7 @@ import pandas as pd
 import os
 import time
 import warnings
+from fastapi import HTTPException
 from dotenv import load_dotenv
 from fastapi import FastAPI, File, UploadFile, Form
 from src.assets.models.llm.llm import LLM
@@ -109,13 +110,6 @@ model = tf.lite.Interpreter(model_path=config.model_path)
 found_signs = list(model.get_signature_list().keys())
 prediction_fn = model.get_signature_runner('serving_default')
 
-@app.post("/test")
-async def create_item(uploadFile: Annotated[UploadFile, Form()]):
-    print(uploadFile)
-    if uploadFile.content_type != "video/mp4":
-        return {"name": "Only mp4 files are allowed."}
-    return {"name": uploadFile.filename, "type": uploadFile.content_type}
-
 @app.get('/live-translator')
 async def live_translate():
     seq = []
@@ -151,25 +145,22 @@ async def live_translate():
                 break
         cap.release()
         cv2.destroyAllWindows()
-
-# get input as a video file
-@app.post('/predict')
-async def predict(file: UploadFile = File(...), path = 'data'):
-    with open(f"{path}/{file.filename}", "wb") as buffer:
-        buffer.write(file.file.read())
-
-    cap = cv2.VideoCapture(f"{path}/{file.filename}")
-    os.remove(f"{path}/{file.filename}")
+        
+@app.post("/test")
+async def create_item(uploadFile: Annotated[UploadFile, Form()]):
+    vid = "data/video.mp4"
+    if uploadFile.content_type != "video/mp4":
+        raise HTTPException(status_code=400, detail="File type not supported")
+    
+    with open(vid, "wb") as f:
+        f.write(uploadFile.file.read())
     seq = []
+    cap = cv2.VideoCapture(vid, cv2.CAP_DSHOW)
     preds = ['']
-    curr_len = len(preds)
-    start_time = time.time()
 
     with mp_holistic.Holistic(min_detection_confidence=0.5, min_tracking_confidence=0.5) as holistic:
         while cap.isOpened():
             ret, frame = cap.read()
-            if not ret:
-                break
             img, results = mediapipe_detection(frame, holistic)
             draw(img, results)
 
@@ -181,23 +172,16 @@ async def predict(file: UploadFile = File(...), path = 'data'):
                 sign = decoder(sign)
                 if preds[-1] != sign:
                     preds.append(sign)
-                
-            # cv2.imshow('Sign Language Detection', img)
+    cap.release()
+    cv2.destroyAllWindows()
 
-            # every 3 seconds, print preds to the terminal, get time from browser
-            if len(preds) > curr_len and time.time() - start_time > 3:
-                print(' '.join(preds))
-                start_time = time.time()
-                curr_len = len(preds)
-            if cv2.waitKey(10) & 0xFF == ord('q'):
-                break
-        cap.release()
-        cv2.destroyAllWindows()
+    res = ' '.join(preds)
 
+    os.remove(vid)
+
+    return {"name": res, 
+            "type": ""}
 
 if __name__ == '__main__':
-    live_translate()
-    # predict('path/to/video')
-
-
-
+    # live_translate()
+    print(create_item())

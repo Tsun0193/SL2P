@@ -58,7 +58,7 @@ export class SignedToSpokenComponent implements OnInit {
             formData.append('uploadFile', file, file.name,)
 
             this.http.post("http://127.0.0.1:8000/test", formData).subscribe((data: any) => {
-              this.translateResult = data.name + data.type;             
+              this.translateResult = data.name + " " + data.type;             
             })
           }
           
