@@ -16,33 +16,6 @@ from pydantic import BaseModel
 from typing import Annotated
 from fastapi.middleware.cors import CORSMiddleware
 
-class Item(BaseModel):
-    name: str
-
-warnings.filterwarnings('ignore')
-
-app = FastAPI()
-
-origins = [
-    "http://localhost:4200",
-    "http://127.0.0.1:4200",
-    "http://127.0.0.1:4200/",
-    "http://localhost:4200/"
-]
-
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=origins,
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-    expose_headers=["*"]
-    
-)
-
-load_dotenv()
-completion = LLM()
-
 mp_holistic = mp.solutions.holistic
 mp_drawing = mp.solutions.drawing_utils 
 def mediapipe_detection(image, model):
@@ -110,54 +83,9 @@ model = tf.lite.Interpreter(model_path=config.model_path)
 found_signs = list(model.get_signature_list().keys())
 prediction_fn = model.get_signature_runner('serving_default')
 
-@app.get('/live-translator')
-async def live_translate():
+def xam_lon(path: str):
     seq = []
-    cap = cv2.VideoCapture(0)
-    preds = ['']
-    curr_len = len(preds)
-    start_time = time.time()
-    with mp_holistic.Holistic(min_detection_confidence=0.5, min_tracking_confidence=0.5) as holistic:
-        while cap.isOpened():
-            ret, frame = cap.read()
-            img, results = mediapipe_detection(frame, holistic)
-            draw(img, results)
-
-            landmarks = extract_coordinates(results)
-            seq.append(landmarks)
-            if len(seq) % 15 == 0:
-                prediction = prediction_fn(inputs=np.array(seq, dtype = np.float32))
-                sign = np.argmax(prediction["outputs"])
-                sign = decoder(sign)
-                if preds[-1] != sign:
-                    preds.append(sign)
-                
-            cv2.imshow('Sign Language Detection', img)
-
-            # every 3 seconds, print preds to the terminal, get time from browser
-            if len(preds) > curr_len and time.time() - start_time > 3 and len(preds) > 1:
-                text = ' '.join(preds)
-                print(preds)
-                print(completion(text))
-                start_time = time.time()
-                curr_len = len(preds)
-            if cv2.waitKey(10) & 0xFF == ord('q'):
-                break
-        cap.release()
-        cv2.destroyAllWindows()
-        
-@app.post("/test")
-async def create_item(uploadFile: Annotated[UploadFile, Form()]):
-    vid = "data/video.mp4"
-    if uploadFile.content_type != "video/mp4":
-        raise HTTPException(status_code=400, detail="File type not supported")
-    
-    print(vid)
-    
-    with open(vid, "wb") as f:
-        f.write(uploadFile.file.read())
-    seq = []
-    cap = cv2.VideoCapture(vid)
+    cap = cv2.VideoCapture(path)
     preds = ['']
 
     print(cap.isOpened())
@@ -178,16 +106,7 @@ async def create_item(uploadFile: Annotated[UploadFile, Form()]):
                         preds.append(sign)
             else: 
                 break
-    cap.release()
-    cv2.destroyAllWindows()
-
-    res = ' '.join(preds)
-
-    os.remove(vid)
-
-    return {"name": res, 
-            "type": ""}
+    print(preds)
 
 if __name__ == '__main__':
-    # live_translate()
-    print(create_item())
+    xam_lon("data/test.mp4")

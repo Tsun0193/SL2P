@@ -77,6 +77,5 @@ bun.lockb
 data/*
 
 #ignore __pycache__
-__pycache__/
-*.pyc
-/src/assets/models/llm/__pycache__/
+__pycache__
+src\assets\models\llm\__pycache__
