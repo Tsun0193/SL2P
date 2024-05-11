@@ -2,7 +2,7 @@
 
 @media #{$breakpoint-gt-xs} {
   .container::before {
-    background-color: var(--app-background-color);
+    background-color: white;
     // border-bottom: 1px solid var(--app-divider-color);
     content: '';
     display: block;
@@ -18,7 +18,7 @@
   transition: 0.6s all cubic-bezier(0.4, 0, 0.2, 1);
 
   @media #{$breakpoint-gt-md} {
-    padding: 48px;
+    padding: 50px;
     padding-top: 0;
   }
 
@@ -51,7 +51,7 @@
     }
 
     @media #{$breakpoint-gt-xs} {
-      box-shadow: 0 0 4px 0 whitesmoke;
+      box-shadow: 0 0 2px 0 rgba(0, 0, 0, 0.37);
     }
 
     @media #{$breakpoint-gt-md} {
@@ -59,9 +59,10 @@
       overflow: hidden;
     }
 
-    app-language-selectors {
-      border-bottom: 1px solid var(--app-divider-color);
-    }
+    // app-language-selectors {
+    //   // border-bottom: 1px solid var(--app-divider-color);
+    //   border: none
+    // }
   }
 }
 

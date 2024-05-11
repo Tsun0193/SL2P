@@ -15,7 +15,6 @@
     width: 100%;
     left: 0;
     right: 0;
-    padding: 0 24px;
 
     ion-icon {
       padding: 0 4px;
@@ -47,20 +46,20 @@
   text-align: start !important;
 }
 
-ion-textarea#mobile {
-  margin-top: 6px;
-  margin-bottom: 6px;
-  border-radius: 20px;
-  --padding-start: 10px;
-  --highlight-color: var(--ion-color-primary);
+// ion-textarea#mobile {
+//   margin-top: 6px;
+//   margin-bottom: 6px;
+//   border-radius: 20px;
+//   --padding-start: 10px;
+//   --highlight-color: var(--ion-color-primary);
 
-  &.sc-ion-textarea-ios-h {
-    /* Address strange height on iOS */
-    min-height: initial;
+//   &.sc-ion-textarea-ios-h {
+//     /* Address strange height on iOS */
+//     min-height: initial;
 
-    background-color: white;
-    @media (prefers-color-scheme: dark) {
-      background-color: white;
-    }
-  }
-}
+//     background-color: white;
+//     @media (prefers-color-scheme: dark) {
+//       background-color: white;
+//     }
+//   }
+// }

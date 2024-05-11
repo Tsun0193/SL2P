@@ -16,14 +16,14 @@
   }
 
   > *:not(:last-child) {
-    border-inline-end: 1px solid var(--app-divider-color);
+    border-inline-end: none;
   }
 }
 
 app-sign-writing {
   @media #{$breakpoint-lt-sm} {
     border: none !important;
-    height: 195px;
+    height: 10px;
   }
 }
 
