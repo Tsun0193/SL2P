@@ -7,7 +7,14 @@
   aspect-ratio: 1;
 
   @media #{$breakpoint-gt-xs} {
-    background-color: rgb(233, 233, 233);
+    background-color: white;
+    border: 1px solid #ccc;
+    width: 80%;
+    height: 80%;;
+    padding-top: 30px;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    resize: none;
   }
 
   @media (prefers-color-scheme: light) {
@@ -16,11 +23,13 @@
 }
 
 app-skeleton-pose-viewer {
-  height: 100%;
-  display: flex;
-  align-items: center;
+  display: block;
+  width: 80%;
+  height: 80%;
 }
 
 video {
   display: block;
+  width: 80%;
+  height: 80%;
 }

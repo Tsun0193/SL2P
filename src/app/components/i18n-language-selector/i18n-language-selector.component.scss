@@ -14,16 +14,19 @@ select {
 
   &:hover {
     border-color: #1972d2; // Change border color on hover
-    background-color: rgba(66, 133, 244, 0.12);
+    background-color: rgba(66, 134, 244, 0.186)
   }
+
   &:focus {
     outline: none;
-    // transition: 0.6s width cubic-bezier(0.4, 0, 0.2, 1);
+    transition: 0.6s width cubic-bezier(0.4, 0, 0.2, 1);
+    background-color: rgba(66, 134, 244, 0.227);
     cursor: pointer;
   }
 
   &::-ms-expand {
     display: none;
+    background-color: rgba(66, 134, 244, 0.315);
   }
 
   optgroup {
@@ -32,8 +35,8 @@ select {
 
   option {
     padding: 8px;
-    background-color: #333;
-    color: #fff;
+    background-color: white;
+    color: black;
   }
 
   /* Arrow icon */
