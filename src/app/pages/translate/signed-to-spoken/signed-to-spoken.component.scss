@@ -16,7 +16,7 @@
   }
 
   app-sign-writing {
-    border-inline-end: 1px solid var(--app-divider-color);
+    // border-inline-end: 1px solid var(--app-divider-color);
 
     @media #{$breakpoint-lt-sm} {
       height: 235px;
@@ -33,8 +33,10 @@
   padding: 20px 58px 20px 24px;
   border: 1px red;
   color: black;
+  background-color: white;
   font-size: 24px;
   line-height: 32px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   flex: 1;
   display: flex;
   flex-direction: column;
@@ -42,6 +44,10 @@
 
   :first-child {
     flex-grow: 1;
+  }
+
+  .circle-icon {
+    margin-left: 10px;
   }
 }
 
