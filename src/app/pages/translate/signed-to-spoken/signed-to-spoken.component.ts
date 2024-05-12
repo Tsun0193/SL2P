@@ -25,6 +25,7 @@ export class SignedToSpokenComponent implements OnInit {
   spokenLanguage$!: Observable<string>;
   spokenLanguageText$!: Observable<string>;
   hasSent: boolean = false;
+  hasRequest: boolean = false;
   translateResult: string = null;
 
   constructor(private http: HttpClient, private store: Store) {
@@ -40,51 +41,64 @@ export class SignedToSpokenComponent implements OnInit {
     // To get the fake translation
     let lastArray = [];
     let lastText = '';
+    let endpoint = '';
 
     const f = async () => {
       const video: HTMLVideoElement | null = document.querySelector("div[id='video-container']>video");
       
-      if (video !== undefined && video !== null && video.getAttribute("src") !== undefined && 
-          video.getAttribute("src") !== null && video.getAttribute("src") !== "") {
-        
-        if (!this.hasSent) {
-          let blob = await fetch(video.getAttribute("src")).then(r => r.blob());
-          if (blob !== undefined && blob !== null) {
-            this.hasSent = true
-            console.log(blob);
+      this.inputMode$.subscribe(mode => {
+        endpoint = mode === 'upload' ? "http://127.0.0.1:8000/test" : "http://127.0.0.1:8000/live-translator";
+      });
 
-            let formData:FormData = new FormData();
-            let file = new File([blob], "vid", { type: blob.type });
-            formData.append('uploadFile', file, file.name,)
+      if (endpoint === "http://127.0.0.1:8000/test"){
+        if (video !== undefined && video !== null && video.getAttribute("src") !== undefined && 
+            video.getAttribute("src") !== null && video.getAttribute("src") !== "") {
+          
+          if (!this.hasSent) {
+            let blob = await fetch(video.getAttribute("src")).then(r => r.blob());
+            if (blob !== undefined && blob !== null) {
+              this.hasSent = true
+              console.log(blob);
 
-            this.http.post("http://127.0.0.1:8000/test", formData).subscribe((data: any) => {
-              this.translateResult = data.name + " " + data.type;             
-            })
+              let formData:FormData = new FormData();
+              let file = new File([blob], "vid", { type: blob.type });
+              formData.append('uploadFile', file, file.name,)
+
+              this.http.post("http://127.0.0.1:8000/test", formData).subscribe((data: any) => {
+                this.translateResult = data.name + " " + data.type;             
+              })
+            }
           }
           
-        }
-        
-        let resultArray = [];
-        let resultText = this.translateResult;
-        for (const step of FAKE_WORDS) {
-          if (step.time <= video.currentTime) {
-            resultText = step.text;
-            resultArray = step.sw;
+          let resultArray = [];
+          let resultText = this.translateResult;
+          
+          for (const step of FAKE_WORDS) {
+            if (step.time <= video.currentTime) {
+              resultText = step.text;
+              resultArray = step.sw;
+            }
+          }
+
+          if (resultText !== lastText) {
+            this.store.dispatch(new SetSpokenLanguageText(resultText));
+            lastText = resultText;
+          }
+
+          if (JSON.stringify(resultArray) !== JSON.stringify(lastArray)) {
+            this.store.dispatch(new SetSignWritingText(resultArray));
+            lastArray = resultArray;
           }
         }
-
-        if (resultText !== lastText) {
-          this.store.dispatch(new SetSpokenLanguageText(resultText));
-          lastText = resultText;
+      } else {
+        if (!this.hasRequest){
+          this.http.get(endpoint).subscribe((data: any) => {
+            console.log(data); // This will print the data to the console
+            this.translateResult = data.res;            
+          })
+          this.hasRequest = true;
         }
-
-        if (JSON.stringify(resultArray) !== JSON.stringify(lastArray)) {
-          this.store.dispatch(new SetSignWritingText(resultArray));
-          lastArray = resultArray;
-        }
-
       }
-
       requestAnimationFrame(f);
     };
     f();

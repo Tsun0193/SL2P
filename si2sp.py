@@ -138,13 +138,24 @@ async def live_translate():
             if len(preds) > curr_len and time.time() - start_time > 3 and len(preds) > 1:
                 text = ' '.join(preds)
                 print(preds)
-                print(completion(text))
+                # live_translate_post(completion(text))
                 start_time = time.time()
                 curr_len = len(preds)
             if cv2.waitKey(10) & 0xFF == ord('q'):
                 break
         cap.release()
         cv2.destroyAllWindows()
+        
+        res = completion(' '.join(preds))
+        return {res}
+    
+@app.post('/live-translator-post')
+async def live_translate_post(res: str):
+    print(res)
+    return {
+        "name": res, 
+        "type": ""
+    }
         
 @app.post("/test")
 async def create_item(uploadFile: Annotated[UploadFile, Form()]):
@@ -190,5 +201,5 @@ async def create_item(uploadFile: Annotated[UploadFile, Form()]):
             "type": ""}
 
 if __name__ == '__main__':
-    # live_translate()
+    print(live_translate())
     print(create_item())

@@ -26,6 +26,7 @@ def mediapipe_detection(image, model):
     image = cv2.cvtColor(image, cv2.COLOR_RGB2BGR) 
     return image, pred
 
+completion = LLM()
 
 def draw(image, results):
     mp_drawing.draw_landmarks(image, results.face_landmarks, mp_holistic.FACEMESH_TESSELATION,
@@ -83,30 +84,49 @@ model = tf.lite.Interpreter(model_path=config.model_path)
 found_signs = list(model.get_signature_list().keys())
 prediction_fn = model.get_signature_runner('serving_default')
 
-def xam_lon(path: str):
+def live_translate_xam_lz():
     seq = []
-    cap = cv2.VideoCapture(path)
+    cap = cv2.VideoCapture(0)
     preds = ['']
-
-    print(cap.isOpened())
+    curr_len = len(preds)
+    start_time = time.time()
     with mp_holistic.Holistic(min_detection_confidence=0.5, min_tracking_confidence=0.5) as holistic:
         while cap.isOpened():
             ret, frame = cap.read()
-            if ret:
-                img, results = mediapipe_detection(frame, holistic)
-                draw(img, results)
+            img, results = mediapipe_detection(frame, holistic)
+            draw(img, results)
 
-                landmarks = extract_coordinates(results)
-                seq.append(landmarks)
-                if len(seq) % 15 == 0:
-                    prediction = prediction_fn(inputs=np.array(seq, dtype = np.float32))
-                    sign = np.argmax(prediction["outputs"])
-                    sign = decoder(sign)
-                    if preds[-1] != sign:
-                        preds.append(sign)
-            else: 
+            landmarks = extract_coordinates(results)
+            seq.append(landmarks)
+            if len(seq) % 15 == 0:
+                prediction = prediction_fn(inputs=np.array(seq, dtype = np.float32))
+                sign = np.argmax(prediction["outputs"])
+                sign = decoder(sign)
+                if preds[-1] != sign:
+                    preds.append(sign)
+                
+            cv2.imshow('Sign Language Detection', img)
+
+            # every 3 seconds, print preds to the terminal, get time from browser
+            if len(preds) > curr_len and time.time() - start_time > 3 and len(preds) > 1:
+                text = ' '.join(preds)
+                print(preds)
+                print(completion(text))
+                start_time = time.time()
+                curr_len = len(preds)
+            if cv2.waitKey(10) & 0xFF == ord('q'):
                 break
-    print(preds)
+        cap.release()
+        cv2.destroyAllWindows()
+        
+        res = completion(' '.join(preds))
+        return live_translate_post(res)
 
+def live_translate_post(res: str):
+    return {
+        "name": res, 
+        "type": ""
+    }
+    
 if __name__ == '__main__':
-    xam_lon("data/test.mp4")
+    print(live_translate_xam_lz())
