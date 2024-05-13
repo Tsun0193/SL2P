@@ -2,7 +2,6 @@
 
 :host {
   background-color: white;
-
   position: relative;
   aspect-ratio: 1;
 
@@ -10,8 +9,8 @@
     background-color: white;
     border: 1px solid #ccc;
     width: 80%;
-    height: 80%;;
-    padding-top: 30px;
+    height: 80%;
+    padding-top: 10px;
     border-radius: 5px;
     margin-bottom: 10px;
     resize: none;
@@ -23,13 +22,20 @@
 }
 
 app-skeleton-pose-viewer {
-  display: block;
-  width: 80%;
-  height: 80%;
+  display: flex;
+  background-color: white;
+}
+
+.video-container {
+  padding-bottom: 20px;
+  position: relative;
+  height: 100%;
+  width: 100%;
 }
 
 video {
+  position: center;
   display: block;
-  width: 80%;
-  height: 80%;
+  width: 100%;
+  height: 85%;
 }

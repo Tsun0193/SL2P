@@ -1,12 +1,17 @@
 .translation-text {
   position: relative;
   height: 100%;
-  padding: 20px;
+  padding-top: 20px;
+  padding-right: 20px;
+  padding-left: 20px;
+
   flex: 1;
 
   > .actions-row {
+    padding-top: 20px;
     display: flex;
-  }
+    height: 10%;
+    }
 
   > #suggestions {
     position: absolute;
