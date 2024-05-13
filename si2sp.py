@@ -112,6 +112,7 @@ prediction_fn = model.get_signature_runner('serving_default')
 
 @app.get('/live-translator')
 async def live_translate():
+    print("Start Camera")
     seq = []
     cap = cv2.VideoCapture(0)
     preds = ['']
@@ -145,6 +146,11 @@ async def live_translate():
                 break
         cap.release()
         cv2.destroyAllWindows()
+    
+    res = ' '.join(preds)
+    print(res)
+    return {"name": res, 
+            "type": ""}
         
 @app.post("/test")
 async def create_item(uploadFile: Annotated[UploadFile, Form()]):
@@ -181,8 +187,10 @@ async def create_item(uploadFile: Annotated[UploadFile, Form()]):
     cap.release()
     cv2.destroyAllWindows()
 
+    # res = completion(' '.join(preds))
+    res = ' '.join(preds)
     print(preds)
-    res = completion(' '.join(preds))
+    print(res)
 
     os.remove(vid)
 

@@ -25,6 +25,7 @@ export class SignedToSpokenComponent implements OnInit {
   spokenLanguage$!: Observable<string>;
   spokenLanguageText$!: Observable<string>;
   hasSent: boolean = false;
+  startCam: boolean = true;
   translateResult: string = null;
 
   constructor(private http: HttpClient, private store: Store) {
@@ -61,9 +62,19 @@ export class SignedToSpokenComponent implements OnInit {
               this.translateResult = data.name + " " + data.type;             
             })
           }
-          
         }
-        
+        this.startCam = true
+      }
+      else {
+        if(this.startCam){
+          this.translateResult = "Data from camera";
+          this.startCam = false
+          this.http.get("http://127.0.0.1:8000/live-translator").subscribe((data: any) => {
+            this.translateResult = data.name + " " + data.type; 
+            console.log("Data form cam", data)            
+          }) 
+        }
+      }
         let resultArray = [];
         let resultText = this.translateResult;
         for (const step of FAKE_WORDS) {
@@ -82,9 +93,6 @@ export class SignedToSpokenComponent implements OnInit {
           this.store.dispatch(new SetSignWritingText(resultArray));
           lastArray = resultArray;
         }
-
-      }
-
       requestAnimationFrame(f);
     };
     f();
