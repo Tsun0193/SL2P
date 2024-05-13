@@ -112,6 +112,7 @@ prediction_fn = model.get_signature_runner('serving_default')
 
 @app.get('/live-translator')
 async def live_translate():
+    print("Start Camera")
     seq = []
     cap = cv2.VideoCapture(0)
     preds = ['']
@@ -138,24 +139,18 @@ async def live_translate():
             if len(preds) > curr_len and time.time() - start_time > 3 and len(preds) > 1:
                 text = ' '.join(preds)
                 print(preds)
-                # live_translate_post(completion(text))
+                print(completion(text))
                 start_time = time.time()
                 curr_len = len(preds)
             if cv2.waitKey(10) & 0xFF == ord('q'):
                 break
         cap.release()
         cv2.destroyAllWindows()
-        
-        res = completion(' '.join(preds))
-        return {res}
     
-@app.post('/live-translator-post')
-async def live_translate_post(res: str):
+    res = ' '.join(preds)
     print(res)
-    return {
-        "name": res, 
-        "type": ""
-    }
+    return {"name": res, 
+            "type": ""}
         
 @app.post("/test")
 async def create_item(uploadFile: Annotated[UploadFile, Form()]):
@@ -192,8 +187,10 @@ async def create_item(uploadFile: Annotated[UploadFile, Form()]):
     cap.release()
     cv2.destroyAllWindows()
 
+    # res = completion(' '.join(preds))
+    res = ' '.join(preds)
     print(preds)
-    res = completion(' '.join(preds))
+    print(res)
 
     os.remove(vid)
 
@@ -201,5 +198,5 @@ async def create_item(uploadFile: Annotated[UploadFile, Form()]):
             "type": ""}
 
 if __name__ == '__main__':
-    print(live_translate())
+    # live_translate()
     print(create_item())
