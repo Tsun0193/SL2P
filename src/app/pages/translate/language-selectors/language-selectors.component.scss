@@ -11,8 +11,8 @@ app-language-selector {
 
 #swap-languages {
   // Custom styles for the button
-  background-color: #1972d2b9; // Set background color
-  color: #222438; // Set text color
+  background-color: #1972d2; // Set background color
+  color: white; // Set text color
   border: 0px solid #ccc; // Add border
   border-radius: 0px; // Add border radius
   padding: 5px 482px; // Adjust padding as needed
@@ -24,7 +24,7 @@ app-language-selector {
     margin-top: 20px;
   // Apply styles when button is hovered
   &:hover {
-    background-color: #1972d2// Change background color on hover
+    background-color: #1972d2c5// Change background color on hover
   }
 
   // Apply styles when button is disabled

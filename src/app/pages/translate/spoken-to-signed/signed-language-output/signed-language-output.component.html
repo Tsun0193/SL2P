@@ -18,11 +18,13 @@
       <app-avatar-pose-viewer *ngIf="poseViewerSetting === 'avatar'" [src]="pose" />
     </ng-container>
   </ng-container>
-  <ng-template #noPose></ng-template>
+  <ng-template #noPose></ng-template> 
 </ng-template>
 
 <div class="actions-row" *ngIf="pose$ | async as pose">
   <ng-container *ngIf="videoUrl; else spinner">
+
+    <!-- Download button -->
     <ion-button
       class="circle-icon"
       fill="clear"
@@ -35,6 +37,7 @@
       <ion-icon name="download-outline" slot="icon-only"></ion-icon>
     </ion-button>
 
+    <!-- Share button -->
     <ion-button
       class="circle-icon"
       fill="clear"
@@ -47,11 +50,15 @@
       [matTooltipPosition]="'above'">
       <ion-icon ios="share-outline" md="share-social-outline" slot="icon-only"></ion-icon>
     </ion-button>
+
   </ng-container>
+
+  <!-- Loading -->
   <ng-template #spinner>
     <ion-button [disabled]="true" class="circle-icon" fill="clear" shape="round">
       <ion-spinner name="crescent" color="dark"></ion-spinner>
     </ion-button>
   </ng-template>
+  
   <app-viewer-selector></app-viewer-selector>
 </div>
