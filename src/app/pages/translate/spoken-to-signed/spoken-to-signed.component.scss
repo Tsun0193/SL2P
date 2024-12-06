@@ -3,8 +3,9 @@
 :host {
   display: grid;
   width: 100%;
+  margin: auto;
   grid-template-areas: 'spoken signwriting signed';
-  grid-template-columns: auto 100px 50%;
+  grid-template-columns: 45% 10% 45%;
 
   @media #{$breakpoint-lt-sm} {
     grid-template-areas: 'signed signed' 'spoken signwriting';
@@ -16,17 +17,31 @@
   }
 
   > *:not(:last-child) {
-    border-inline-end: 1px solid var(--app-divider-color);
+    border-inline-end: none;
   }
 }
 
 app-sign-writing {
   @media #{$breakpoint-lt-sm} {
     border: none !important;
-    height: 195px;
+    height: 10px;
   }
 }
 
 app-signed-language-output {
-  grid-area: signed;
+  width: 100%;
+  height: 91.4%;
+  // grid-area: signed;
+  background-color: white;
+}
+
+#output {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  justify-content: center;
+  align-items: flex-start;
+  padding-top: 20px;
+  padding-left: 20px;
+  padding-right: 20px;
 }

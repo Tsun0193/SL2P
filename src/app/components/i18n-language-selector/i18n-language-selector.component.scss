@@ -1,21 +1,56 @@
 select {
-  font-size: 14px;
-  border: none;
-  background: transparent;
+  position: relative;
+  appearance: none;
+  background-color: rgba(66, 133, 244, 0.12);
+  color: #1972d2;
+  border: 1px solid #1972d2;
+  border-radius: 4px;
+  padding: 8px 30px 8px 12px; /* Increased right padding for the arrow */
+  font-size: 16px;
+  font-weight: 450;
+  width: 100%;
+  max-width: 300px; /* Adjust as needed */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: border-color 0.3s ease;
 
-  &:focus-visible {
-    outline: none;
+  &:hover {
+    border-color: #1972d2; // Change border color on hover
+    background-color: rgba(66, 134, 244, 0.186)
   }
 
-  @media (prefers-color-scheme: dark) {
-    color: white;
+  &:focus {
+    outline: none;
+    transition: 0.6s width cubic-bezier(0.4, 0, 0.2, 1);
+    background-color: rgba(66, 134, 244, 0.227);
+    cursor: pointer;
+  }
 
-    * {
-      /*
-      Only required for Windows, Chrome
-      https://github.com/sign/translate/issues/54
-       */
-      background: black;
-    }
+  &::-ms-expand {
+    display: none;
+    background-color: rgba(66, 134, 244, 0.315);
+  }
+
+  optgroup {
+    font-weight: bold;
+  }
+
+  option {
+    padding: 8px;
+    background-color: white;
+    color: black;
+  }
+
+  /* Arrow icon */
+  &::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    right: 12px;
+    transform: translateY(-50%);
+    width: 0;
+    height: 0;
+    border-left: 6px solid transparent;
+    border-right: 6px solid transparent;
+    border-top: 6px solid #fff; /* Arrow color */
   }
 }

@@ -1,6 +1,5 @@
 :host {
   display: flex;
-
   &.spoken-to-signed {
     flex-direction: row-reverse;
   }
@@ -11,10 +10,31 @@ app-language-selector {
 }
 
 #swap-languages {
-  height: 48px;
-  margin: 0;
+  // Custom styles for the button
+  background-color: #1972d2; // Set background color
+  color: white; // Set text color
+  border: 0px solid #ccc; // Add border
+  border-radius: 0px; // Add border radius
+  padding: 5px 482px; // Adjust padding as needed
+  font-size: 10px; // Adjust font size as needed
+  cursor: pointer; // Set cursor to pointer
+  transition: background-color 0.3s ease; // Add transition effect for background color
+  display: inline-block; // Make button behave as a block-level element
+    margin: 0 auto; // Center button horizontally
+    margin-top: 20px;
+  // Apply styles when button is hovered
+  &:hover {
+    background-color: #1972d2c5// Change background color on hover
+  }
 
+  // Apply styles when button is disabled
   &[disabled] {
-    opacity: 0.5;
+    opacity: 0.5; // Reduce opacity for disabled state
+    cursor: not-allowed; // Set cursor to not-allowed for disabled state
+  }
+
+  // Apply styles to the ion-icon inside the button
+  ion-icon {
+    margin-right: 5px; // Adjust margin between icon and text
   }
 }

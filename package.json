@@ -4,7 +4,7 @@
   "scripts": {
     "ng": "ng",
     "lint": "NODE_OPTIONS=--max_old_space_size=16384 ng lint",
-    "start": "ng serve --host 0.0.0.0",
+    "start": "ng serve --host 0.0.0.0 --disable-host-check",
     "build": "ng build --configuration=production --base-href=/",
     "build:stats": "ng build --stats-json",
     "analyze": "webpack-bundle-analyzer dist/sign-translate/browser/stats.json",
@@ -18,7 +18,7 @@
     "mobile:sync": "tsx tools/mobile/sync.ts",
     "mobile:metadata": "tsx tools/mobile/metadata/metadata.ts",
     "prepare:husky": "node -e \"require('fs').cpSync('node_modules/@sign-mt/configuration/.husky/', '.husky/', {recursive: true})\"",
-    "prepare": "husky install && npm run prepare:husky",
+    "prepare": "",
     "dev:ssr": "ng run sign-translate:serve-ssr",
     "serve:ssr": "node dist/sign-translate/server/main.js",
     "build:ssr": "ng build && ng run sign-translate:server",
@@ -27,7 +27,7 @@
     "generate:terms": "marked -i LICENSE.md -o src/app/pages/landing/terms/terms.component.html",
     "generate:sitemap": "node tools/sitemap-generator.js",
     "generate:licenses": "npm-license-crawler --json dist/sign-translate/browser/licenses.json --onlyDirectDependencies --exclude ios --exclude android --exclude dist --exclude functions",
-    "build:full": "npm run generate:terms && npm run prerender && npm run generate:sitemap && npm run generate:licenses"
+    "build:full": "npm run prerender && npm run generate:sitemap"
   },
   "engines": {
     "node": ">=18",
@@ -138,7 +138,6 @@
     "dotenv": "16.4.5",
     "eslint": "8.57.0",
     "fuzzy": "0.1.3",
-    "husky": "9.0.11",
     "inquirer": "9.2.18",
     "inquirer-autocomplete-prompt": "3.0.1",
     "jasmine-axe": "1.1.0",
@@ -164,5 +163,6 @@
     "typescript": "5.4.3",
     "webpack-bundle-analyzer": "4.10.2",
     "zod": "3.22.4"
-  }
+  },
+  "packageManager": "yarn@1.22.22+sha1.ac34549e6aa8e7ead463a7407e1c7390f61a6610"
 }

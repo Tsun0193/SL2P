@@ -51,7 +51,7 @@ $app-dark-theme: mat.define-dark-theme(
 
 @include theme-components($app-theme);
 
-@media (prefers-color-scheme: dark) {
+@media (prefers-color-scheme: light) {
   @include theme-components($app-dark-theme);
 }
 

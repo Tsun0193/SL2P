@@ -66,37 +66,37 @@ export class VideoState implements NgxsOnInit {
 
   @Action(StartCamera)
   async startCamera(context: StateContext<VideoStateModel>): Promise<void> {
-    const {patchState, dispatch} = context;
+    // const {patchState, dispatch} = context;
 
-    patchState({error: 'starting'});
-    this.stopVideo(context);
+    // patchState({error: 'starting'});
+    // this.stopVideo(context);
 
-    const turnOffVideo = () => dispatch(new SetSetting('receiveVideo', false));
+    // const turnOffVideo = () => dispatch(new SetSetting('receiveVideo', false));
 
-    try {
-      const camera = await this.navigator.getCamera({
-        facingMode: 'user',
-        aspectRatio: 1,
-        width: {min: 1280},
-        height: {min: 720},
-        frameRate: 120, // Used to minimize motion blur
-      });
+    // try {
+    //   const camera = await this.navigator.getCamera({
+    //     facingMode: 'user',
+    //     aspectRatio: 1,
+    //     width: {min: 1280},
+    //     height: {min: 720},
+    //     frameRate: 120, // Used to minimize motion blur
+    //   });
 
-      const videoTrack = camera.getVideoTracks()[0];
-      const trackSettings = videoTrack.getSettings();
-      const videoSettings: VideoSettings = {
-        aspectRatio: VideoState.aspectRatio(trackSettings.aspectRatio),
-        frameRate: trackSettings.frameRate,
-        width: trackSettings.width,
-        height: trackSettings.height,
-      };
-      videoTrack.addEventListener('ended', turnOffVideo);
+    //   const videoTrack = camera.getVideoTracks()[0];
+    //   const trackSettings = videoTrack.getSettings();
+    //   const videoSettings: VideoSettings = {
+    //     aspectRatio: VideoState.aspectRatio(trackSettings.aspectRatio),
+    //     frameRate: trackSettings.frameRate,
+    //     width: trackSettings.width,
+    //     height: trackSettings.height,
+    //   };
+    //   videoTrack.addEventListener('ended', turnOffVideo);
 
-      patchState({camera, videoSettings, error: null});
-    } catch (e) {
-      patchState({error: e.message});
-      turnOffVideo();
-    }
+    //   patchState({camera, videoSettings, error: null});
+    // } catch (e) {
+    //   patchState({error: e.message});
+    //   turnOffVideo();
+    // }
   }
 
   @Action(SetVideo)

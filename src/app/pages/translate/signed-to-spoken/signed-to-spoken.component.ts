@@ -7,72 +7,11 @@ import {
   SetSignWritingText,
   SetSpokenLanguageText,
 } from '../../../modules/translate/translate.actions';
+import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs';
 
 const FAKE_WORDS = [
-  {
-    time: 0.618368,
-    sw: ['M507x523S15a28494x496'],
-    text: 'B',
-  },
-  {
-    time: 0.876432,
-    sw: ['M507x523S15a28494x496S26500493x477'],
-    text: 'Your',
-  },
-
-  {
-    time: 1.102468,
-    sw: ['M507x523S15a28494x496S26500493x477', 'M522x525S11541498x491S115494'],
-    text: 'Your h',
-  },
-  {
-    time: 1.102468,
-    sw: ['M507x523S15a28494x496S26500493x477', 'M522x525S11541498x491'],
-    text: 'Your h',
-  },
-  {
-    time: 1.438297,
-    sw: ['M507x523S15a28494x496S26500493x477', 'M522x525S11541498x491S11549479x498'],
-    text: 'Your',
-  },
-  {
-    time: 1.628503,
-    sw: ['M507x523S15a28494x496S26500493x477', 'M522x525S11541498x491S11549479x498S20500489x476'],
-    text: 'Your',
-  },
-  {
-    time: 1.786967,
-    sw: ['M507x523S15a28494x496S26500493x477', 'M522x525S11541498x491S11549479x498S20600489x476'],
-    text: 'Your name',
-  },
-  {
-    time: 1.993408,
-    sw: [
-      'M507x523S15a28494x496S26500493x477',
-      'M522x525S11541498x491S11549479x498S20600489x476',
-      'M554x585S30a00481x488S14c39465x545S14c31508x546',
-    ],
-    text: 'Your name',
-  },
-  {
-    time: 2.163386,
-    sw: [
-      'M507x523S15a28494x496S26500493x477',
-      'M522x525S11541498x491S11549479x498S20600489x476',
-      'M554x585S30a00481x488S30300481x477S14c31508x546S14c39465x545S26506539x545S26512445x545',
-    ],
-    text: 'Your name',
-  },
-  {
-    time: 3.113322,
-    sw: [
-      'M507x523S15a28494x496S26500493x477',
-      'M522x525S11541498x491S11549479x498S20600489x476',
-      'M554x585S30a00481x488S30300481x477S14c31508x546S14c39465x545S27102539x545S27116445x545',
-    ],
-    text: 'What is your name?',
-  },
+  
 ];
 
 @Component({
@@ -85,8 +24,11 @@ export class SignedToSpokenComponent implements OnInit {
   inputMode$!: Observable<InputMode>;
   spokenLanguage$!: Observable<string>;
   spokenLanguageText$!: Observable<string>;
+  hasSent: boolean = false;
+  startCam: boolean = true;
+  translateResult: string = null;
 
-  constructor(private store: Store) {
+  constructor(private http: HttpClient, private store: Store) {
     this.videoState$ = this.store.select<VideoStateModel>(state => state.video);
     this.inputMode$ = this.store.select<InputMode>(state => state.translate.inputMode);
     this.spokenLanguage$ = this.store.select<string>(state => state.translate.spokenLanguage);
@@ -100,11 +42,41 @@ export class SignedToSpokenComponent implements OnInit {
     let lastArray = [];
     let lastText = '';
 
-    const f = () => {
-      const video = document.querySelector('video');
-      if (video) {
+    const f = async () => {
+      const video: HTMLVideoElement | null = document.querySelector("div[id='video-container']>video");
+      
+      if (video !== undefined && video !== null && video.getAttribute("src") !== undefined && 
+          video.getAttribute("src") !== null && video.getAttribute("src") !== "") {
+        
+        if (!this.hasSent) {
+          let blob = await fetch(video.getAttribute("src")).then(r => r.blob());
+          if (blob !== undefined && blob !== null) {
+            this.hasSent = true
+            console.log(blob);
+
+            let formData:FormData = new FormData();
+            let file = new File([blob], "vid", { type: blob.type });
+            formData.append('uploadFile', file, file.name,)
+
+            this.http.post("http://127.0.0.1:8000/test", formData).subscribe((data: any) => {
+              this.translateResult = data.name + " " + data.type;             
+            })
+          }
+        }
+        this.startCam = true
+      }
+      else {
+        if(this.startCam){
+          this.translateResult = "Data from camera";
+          this.startCam = false
+          this.http.get("http://127.0.0.1:8000/live-translator").subscribe((data: any) => {
+            this.translateResult = data.name + " " + data.type; 
+            console.log("Data form cam", data)            
+          }) 
+        }
+      }
         let resultArray = [];
-        let resultText = '';
+        let resultText = this.translateResult;
         for (const step of FAKE_WORDS) {
           if (step.time <= video.currentTime) {
             resultText = step.text;
@@ -121,8 +93,6 @@ export class SignedToSpokenComponent implements OnInit {
           this.store.dispatch(new SetSignWritingText(resultArray));
           lastArray = resultArray;
         }
-      }
-
       requestAnimationFrame(f);
     };
     f();

@@ -30,6 +30,7 @@ import type {Pose} from 'pose-format';
 import {EstimatedPose} from '../pose/pose.state';
 import {StoreFramePose} from '../pose/pose.actions';
 import {PoseService} from '../pose/pose.service';
+import { Router } from '@angular/router';
 
 export type InputMode = 'webcam' | 'upload' | 'text';
 
@@ -89,7 +90,8 @@ export class TranslateState implements NgxsOnInit {
     private service: TranslationService,
     private swService: SignWritingTranslationService,
     private poseService: PoseService,
-    private languageDetectionService: LanguageDetectionService
+    private languageDetectionService: LanguageDetectionService,
+    private router: Router
   ) {
     this.poseViewerSetting$ = this.store.select<PoseViewerSetting>(state => state.settings.poseViewer);
     this.pose$ = this.store.select<EstimatedPose>(state => state.pose.pose);
@@ -152,6 +154,7 @@ export class TranslateState implements NgxsOnInit {
 
     if (mode === 'webcam') {
       dispatch(StartCamera);
+      window.open("http://localhost:8000/live-translator", 'blank')
     }
   }
 
